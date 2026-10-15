@@ -163,7 +163,7 @@ Get-FileHash .\BA-Combat-<버전>-portable.exe -Algorithm SHA256
 
 ## 커뮤니티와 문의
 
-공지, 질문, 버그 제보는 [Discord 서버](https://discord.gg/kmPeRZZuf9)에서 받습니다.
+공지, 질문, 버그 제보는 [Discord 서버](https://discord.gg/rJHuEhgfuZ)에서 받습니다.
 버그를 제보할 때 전투 리포트 스크린샷을 올린다면, 상대 플레이어의 닉네임을 가린 뒤 올려 주세요.
 
 ## 고지
