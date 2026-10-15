@@ -1,11 +1,17 @@
-# 매일 SchaleDB 학생 데이터를 받아 data 브랜치에 올린다. 앱은 data 브랜치의 students.json을 먼저 받는다.
+# 매일 SchaleDB 학생 데이터와 학생·스킬 아이콘을 받아 data 브랜치에 올린다. 앱은 data 브랜치에서 먼저 받는다.
 # 바뀐 내용이 있을 때만 커밋한다. 데이터 형식이 이상하면 스크립트가 실패해서 기존 데이터를 덮지 않는다.
 name: Sync student data
 
 on:
   schedule:
     - cron: '17 21 * * *' # 매일 06:17 (KST)
+  # 수동 실행은 리포에 쓰기 권한이 있는 사람만 할 수 있다
   workflow_dispatch:
+    inputs:
+      refresh_icons:
+        description: 이미 올라간 아이콘도 모두 다시 받기 (SchaleDB가 그림을 바꿨을 때만)
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths:
@@ -30,21 +36,27 @@ jobs:
         with:
           node-version: 22
 
-      - name: Fetch SchaleDB student data
-        run: node .github/scripts/sync-students.mjs "$RUNNER_TEMP/out"
-
-      - name: Publish to the data branch
+      # data 브랜치를 먼저 꺼내 둔다: 이미 올라간 아이콘은 다시 받지 않는다
+      - name: Check out the data branch
         run: |
           set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           if git ls-remote --exit-code --heads origin data > /dev/null; then
             git fetch --depth=1 origin data
             git worktree add -B data "$RUNNER_TEMP/data" origin/data
           else
             git worktree add --orphan -b data "$RUNNER_TEMP/data"
           fi
-          cp -r "$RUNNER_TEMP/out/." "$RUNNER_TEMP/data/"
+
+      - name: Fetch SchaleDB student data and icons
+        env:
+          REFRESH_ICONS: ${{ inputs.refresh_icons && '--refresh-icons' || '' }}
+        run: node .github/scripts/sync-students.mjs "$RUNNER_TEMP/data" $REFRESH_ICONS
+
+      - name: Publish to the data branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           cd "$RUNNER_TEMP/data"
           git add -A
           if git diff --cached --quiet; then
