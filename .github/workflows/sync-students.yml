@@ -53,3 +53,10 @@ jobs:
           fi
           git commit -m "Update student data ($(date -u +%Y-%m-%d))"
           git push origin data
+
+      # jsDelivr는 브랜치 파일을 오래 캐시한다: 앱이 원본(raw) 대신 CDN에서 받을 때도 새 데이터가 가도록 비운다 (실패해도 데이터는 이미 올라감)
+      - name: Purge jsDelivr cache
+        run: |
+          for f in students.json skills.json meta.json README.md; do
+            curl -fsS --max-time 60 "https://purge.jsdelivr.net/gh/${GITHUB_REPOSITORY}@data/$f" > /dev/null || echo "purge failed: $f"
+          done
