@@ -1,4 +1,4 @@
-// SchaleDB 학생 데이터(한국어)를 받아 BA Combat 앱이 쓰는 필드만 남겨 저장한다.
+// SchaleDB 학생 데이터(한국어)를 받아 BA Plana Report 앱이 쓰는 필드만 남겨 저장한다.
 // - students.json: 명부(이름, 구분, 출시 여부, 순서)와 프로필 속성(공격·방어 타입, 무기, 사거리, 엄폐, 포지션, 역할, 학교, 지형 적성)
 // - skills.json: 스킬(EX·기본·강화·서브와 애용품·고유무기 강화, 아이콘 이름)과 효과 이름 사전. 앱이 학생 프로필을 처음 열 때 받는다
 // - icons/student/<Id>.webp, icons/skill/<Icon>.webp: 학생·스킬 아이콘. 앱이 SchaleDB 대신 여기서 먼저 받는다.
@@ -15,7 +15,7 @@ const LOCALIZATION = 'https://schaledb.com/data/kr/localization.min.json'
 const MIN_STUDENTS = 100
 const out = process.argv[2] ?? 'out'
 const refreshIcons = process.argv.includes('--refresh-icons')
-const HEADERS = { 'user-agent': 'BA-Combat student data sync (+https://github.com/NXYUI/BA-Combat)' }
+const HEADERS = { 'user-agent': 'BA-Plana-Report student data sync (+https://github.com/NXYUI/BA-Plana-Report)' }
 
 async function get(url) {
   const res = await fetch(url, { headers: HEADERS, signal: AbortSignal.timeout(60_000) })
@@ -136,11 +136,11 @@ await writeFile(
 )
 await writeFile(
   join(out, 'README.md'),
-  `# BA Combat 학생 데이터
+  `# BA Plana Report 학생 데이터
 
 이 브랜치는 GitHub Actions(\`.github/workflows/sync-students.yml\`)가 매일 자동으로 갱신합니다. 직접 고치지 마세요.
 
-- \`students.json\`: [SchaleDB](https://schaledb.com)의 한국어 학생 데이터에서 BA Combat 앱이 쓰는 필드만 남긴 것 (Id, Name, SquadType, IsReleased, DefaultOrder와 프로필 속성: 공격·방어 타입, 무기, 사거리, 엄폐, 포지션, 역할, 학교, 지형 적성)
+- \`students.json\`: [SchaleDB](https://schaledb.com)의 한국어 학생 데이터에서 BA Plana Report 앱이 쓰는 필드만 남긴 것 (Id, Name, SquadType, IsReleased, DefaultOrder와 프로필 속성: 공격·방어 타입, 무기, 사거리, 엄폐, 포지션, 역할, 학교, 지형 적성)
 - \`skills.json\`: 학생별 스킬(이름, 설명, 레벨별 수치, 코스트, 아이콘 이름)과 효과 이름 사전(SchaleDB 한국어 BuffName). 앱이 학생 프로필을 처음 열 때 받는다
 - \`icons/student/<Id>.webp\`, \`icons/skill/<아이콘 이름>.webp\`: SchaleDB의 학생·스킬 아이콘
 - \`meta.json\`: 출처, 학생 수, 각 파일의 SHA-256, 아이콘 수

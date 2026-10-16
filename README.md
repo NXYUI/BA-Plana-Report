@@ -1,8 +1,10 @@
-# BA Combat
+# BA Plana Report
+
+> 2026년 10월 16일에 이름을 **BA Combat**에서 **BA Plana Report**로, 웹 주소를 **`plana.report`**로 바꿨습니다.
 
 블루 아카이브 **전술대항전**의 전투 리포트 스크린샷을 넣으면 승패와 양쪽 편성을 자동으로 읽어서, 시즌별로 **조합 승률(공격/방어/전체)** 과 **학생별 기록**을 정리해 주는 프로그램입니다. Windows 앱과 설치 없이 쓰는 웹 버전이 있고, 원하는 사람끼리 기록을 모아 보는 **공유 통계**도 있습니다.
 
-**[웹 버전 열기](https://plana.report)** · [Windows 앱 내려받기](https://github.com/NXYUI/BA-Combat/releases) · [Discord 서버](https://discord.gg/bP3QCEsqsH)
+**[웹 버전 열기 (plana.report)](https://plana.report)** · [Windows 앱 내려받기](https://github.com/NXYUI/BA-Plana-Report/releases) · [Discord 서버](https://discord.gg/bP3QCEsqsH)
 
 ![조합 통계 화면](docs/images/compositions.png)
 
@@ -178,7 +180,7 @@
 
 ### 설치
 
-1. [Releases](https://github.com/NXYUI/BA-Combat/releases)에서 `BA-Combat-<버전>-portable.exe`를 받습니다.
+1. [Releases](https://github.com/NXYUI/BA-Plana-Report/releases)에서 `BA-Plana-Report-<버전>-portable.exe`를 받습니다(0.4.0까지는 `BA-Combat-<버전>-portable.exe`).
 2. 원하는 폴더에 두고 실행합니다. 따로 설치할 필요는 없습니다. 실행하면 같은 폴더에 `BA-DATA` 폴더가 생깁니다.
 
 > **Windows의 PC 보호 경고가 뜨면**: 코드 서명이 없는 실행 파일이라 처음 실행할 때 SmartScreen 경고가 나올 수 있습니다. "추가 정보" → "실행"을 누르면 됩니다.
@@ -186,11 +188,12 @@
 받은 파일이 올린 파일과 같은지 확인하려면, 아래 명령의 결과를 표의 값과 비교하세요(대소문자는 상관없습니다). 릴리스 페이지에서 파일 옆에 표시되는 sha256 값과도 같습니다.
 
 ```powershell
-Get-FileHash .\BA-Combat-<버전>-portable.exe -Algorithm SHA256
+Get-FileHash .\BA-Plana-Report-<버전>-portable.exe -Algorithm SHA256
 ```
 
-| 버전 | SHA256 (`BA-Combat-<버전>-portable.exe`) |
+| 버전 | SHA256 (`BA-Plana-Report-<버전>-portable.exe`, 0.4.0까지는 `BA-Combat-<버전>-portable.exe`) |
 |---|---|
+| 0.5.0 | `14314ba27734934da68a925d1695d5e20a84cc996622125ce4a4a93f0f3b90c2` |
 | 0.4.0 | `a4dc26c0a56db13b6b77a700d516b6992f7e11d68271b1847d541439e765f73b` |
 | 0.3.1 | `fd78ea501501df0b8d7e54c56ba31efbb65a2157e7f153bf09e76cdd8670cdab` |
 | 0.3.0 | `c786128d92a9c11c19e16c65fde11ac94569a574177d1707c0e56b71dfacaacd` |
@@ -219,7 +222,7 @@ Get-FileHash .\BA-Combat-<버전>-portable.exe -Algorithm SHA256
 | 위치 | 설명 |
 |---|---|
 | 실행 파일 옆 `BA-DATA` | 기본 저장 위치 |
-| `%APPDATA%\BA Combat\BA-DATA` | 같은 내용의 미러 |
+| `%APPDATA%\BA Plana Report\BA-DATA` | 같은 내용의 미러 (0.4.0까지는 `%APPDATA%\BA Combat\BA-DATA`) |
 
 - 실행 파일을 다른 폴더로 옮기면, 처음 실행할 때 `%APPDATA%`의 미러에서 기록을 가져옵니다.
 - Program Files처럼 쓰기 권한이 없는 폴더에서 실행하면 `%APPDATA%` 쪽만 씁니다.
@@ -241,7 +244,7 @@ Get-FileHash .\BA-Combat-<버전>-portable.exe -Algorithm SHA256
 
 ## 학생 데이터를 받는 곳
 
-- **학생 목록·스킬**: 이 리포의 [`data` 브랜치](https://github.com/NXYUI/BA-Combat/tree/data)에서 받습니다. GitHub Actions가 매일 SchaleDB의 한국어 학생 데이터를 받아, 앱이 쓰는 필드(이름, STRIKER/SPECIAL, 출시 여부, 공격·방어 타입·무기 같은 프로필 속성, 스킬)만 남겨 올려 둡니다. 이 브랜치를 받을 수 없을 때만 SchaleDB에서 직접 받습니다.
+- **학생 목록·스킬**: 이 리포의 [`data` 브랜치](https://github.com/NXYUI/BA-Plana-Report/tree/data)에서 받습니다. GitHub Actions가 매일 SchaleDB의 한국어 학생 데이터를 받아, 앱이 쓰는 필드(이름, STRIKER/SPECIAL, 출시 여부, 공격·방어 타입·무기 같은 프로필 속성, 스킬)만 남겨 올려 둡니다. 이 브랜치를 받을 수 없을 때만 SchaleDB에서 직접 받습니다.
   - 사용자가 늘어도 SchaleDB 서버에 직접 가는 요청이 늘지 않게 하고, SchaleDB의 데이터 형식이 바뀌어도 앱이 깨지기 전에 이 작업에서 걸러지게 하려는 구성입니다.
   - 스킬은 크기가 커서 학생 프로필을 처음 열 때 받습니다.
 - **학생·스킬 아이콘**: 같은 `data` 브랜치에 Actions가 올려 둔 그림을 받습니다. 처음 한 번 받은 그림은 다시 받지 않고, 새 학생·스킬 그림만 받아 올립니다. 앱은 학생 아이콘을 처음 명부를 동기화할 때, 스킬 아이콘은 그 학생의 프로필을 처음 열 때 받아 `BA-DATA/icons`, `BA-DATA/skill-icons`(웹 버전은 브라우저 저장소)에 보관합니다. 이 브랜치에 없는 그림만 SchaleDB에서 직접 받습니다.
