@@ -191,7 +191,7 @@ Get-FileHash .\BA-Combat-<버전>-portable.exe -Algorithm SHA256
 
 | 버전 | SHA256 (`BA-Combat-<버전>-portable.exe`) |
 |---|---|
-| 0.4.0 | `baf7edd539ed4762ceeebe9a5bff56cbe4907d0132e22f1c18ce5dc105e3b7dd` |
+| 0.4.0 | `a4dc26c0a56db13b6b77a700d516b6992f7e11d68271b1847d541439e765f73b` |
 | 0.3.1 | `fd78ea501501df0b8d7e54c56ba31efbb65a2157e7f153bf09e76cdd8670cdab` |
 | 0.3.0 | `c786128d92a9c11c19e16c65fde11ac94569a574177d1707c0e56b71dfacaacd` |
 | 0.2.0 | `143ec0ccbc1173a39806f20f2c604491dc67abf80227c0d3c2b6e1474a3b8217` |
