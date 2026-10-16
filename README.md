@@ -2,7 +2,7 @@
 
 블루 아카이브 **전술대항전**의 전투 리포트 스크린샷을 넣으면 승패와 양쪽 편성을 자동으로 읽어서, 시즌별로 **조합 승률(공격/방어/전체)** 과 **학생별 기록**을 정리해 주는 프로그램입니다. Windows 앱과 설치 없이 쓰는 웹 버전이 있고, 원하는 사람끼리 기록을 모아 보는 **공유 통계**도 있습니다.
 
-**[웹 버전 열기](https://plana.report)** · [Windows 앱 내려받기](https://github.com/NXYUI/BA-Combat/releases) · [Discord 서버](https://discord.gg/rJHuEhgfuZ)
+**[웹 버전 열기](https://plana.report)** · [Windows 앱 내려받기](https://github.com/NXYUI/BA-Combat/releases) · [Discord 서버](https://discord.gg/bP3QCEsqsH)
 
 ![조합 통계 화면](docs/images/compositions.png)
 
@@ -173,7 +173,7 @@ Get-FileHash .\BA-Combat-<버전>-portable.exe -Algorithm SHA256
 
 | 버전 | SHA256 (`BA-Combat-<버전>-portable.exe`) |
 |---|---|
-| 0.3.1 | `f195558dc0b4cfb02cd18f642c2588915d4f2875e4cd270c8d049359b2d8724d` |
+| 0.3.1 | `fd78ea501501df0b8d7e54c56ba31efbb65a2157e7f153bf09e76cdd8670cdab` |
 | 0.3.0 | `c786128d92a9c11c19e16c65fde11ac94569a574177d1707c0e56b71dfacaacd` |
 | 0.2.0 | `143ec0ccbc1173a39806f20f2c604491dc67abf80227c0d3c2b6e1474a3b8217` |
 | 0.1.0 | `5b26cf7e749b23f9f183093dd802b3ff42734ecb745cbd90c88c97fbfc53aee3` |
@@ -247,7 +247,7 @@ Get-FileHash .\BA-Combat-<버전>-portable.exe -Algorithm SHA256
 
 ## 커뮤니티와 문의
 
-공지, 질문, 버그 제보는 [Discord 서버](https://discord.gg/rJHuEhgfuZ)에서 받습니다.
+공지, 질문, 버그 제보는 [Discord 서버](https://discord.gg/bP3QCEsqsH)에서 받습니다.
 버그를 제보할 때 전투 리포트 스크린샷을 올린다면, 상대 플레이어의 닉네임을 가린 뒤 올려 주세요.
 
 ## 고지
