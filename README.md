@@ -193,7 +193,7 @@ Get-FileHash .\BA-Plana-Report-<버전>-portable.exe -Algorithm SHA256
 
 | 버전 | SHA256 (`BA-Plana-Report-<버전>-portable.exe`, 0.4.0까지는 `BA-Combat-<버전>-portable.exe`) |
 |---|---|
-| 0.5.0 | `14314ba27734934da68a925d1695d5e20a84cc996622125ce4a4a93f0f3b90c2` |
+| 0.5.0 | `ac73df3faa911010559a4347b73cd704340db174065d2e34d52e6822b5d53c0e` |
 | 0.4.0 | `a4dc26c0a56db13b6b77a700d516b6992f7e11d68271b1847d541439e765f73b` |
 | 0.3.1 | `fd78ea501501df0b8d7e54c56ba31efbb65a2157e7f153bf09e76cdd8670cdab` |
 | 0.3.0 | `c786128d92a9c11c19e16c65fde11ac94569a574177d1707c0e56b71dfacaacd` |
