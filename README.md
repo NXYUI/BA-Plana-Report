@@ -206,7 +206,7 @@
 
 ### 설치
 
-1. [Releases](https://github.com/NXYUI/BA-Plana-Report/releases)에서 `BA-Plana-Report-<버전>-portable.exe`를 받습니다(0.4.0까지는 `BA-Combat-<버전>-portable.exe`).
+1. [Releases](https://github.com/NXYUI/BA-Plana-Report/releases)에서 `BA-Plana-Report-<버전>-portable.exe`를 받습니다.
 2. 원하는 폴더에 두고 실행합니다. 따로 설치할 필요는 없습니다. 실행하면 같은 폴더에 `BA-DATA` 폴더가 생깁니다.
 
 > **Windows의 PC 보호 경고가 뜨면**: 코드 서명이 없는 실행 파일이라 처음 실행할 때 SmartScreen 경고가 나올 수 있습니다. "추가 정보" → "실행"을 누르면 됩니다.
@@ -229,6 +229,8 @@ Get-FileHash .\BA-Plana-Report-<버전>-portable.exe -Algorithm SHA256
 | 0.3.0 | `c786128d92a9c11c19e16c65fde11ac94569a574177d1707c0e56b71dfacaacd` |
 | 0.2.0 | `143ec0ccbc1173a39806f20f2c604491dc67abf80227c0d3c2b6e1474a3b8217` |
 | 0.1.0 | `5b26cf7e749b23f9f183093dd802b3ff42734ecb745cbd90c88c97fbfc53aee3` |
+
+0.4.0 이하의 실행 파일은 내려서 더 받을 수 없습니다. 위 표의 값은 이미 받아 둔 파일을 확인할 때 쓰세요.
 
 ### 처음 실행했을 때
 
