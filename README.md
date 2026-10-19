@@ -1,8 +1,10 @@
-# BA Plana Report
+# BA Plana Report `BETA`
 
 > 2026년 10월 16일에 이름을 **BA Combat**에서 **BA Plana Report**로, 웹 주소를 **`plana.report`**로 바꿨습니다.
 
 블루 아카이브 **전술대항전**의 전투 리포트 스크린샷을 넣으면 승패와 양쪽 편성을 자동으로 읽어서, 시즌별로 **조합 승률(공격/방어/전체)** 과 **학생별 기록**을 정리해 주는 프로그램입니다. Windows 앱과 설치 없이 쓰는 웹 버전이 있고, 원하는 사람끼리 기록을 모아 보는 **공유 통계**도 있습니다.
+
+> 지금은 **베타(0.x)** 버전입니다. 기록이 충분히 쌓이면 1.0으로 올립니다.
 
 **[웹 버전 열기 (plana.report)](https://plana.report)** · [Windows 앱 내려받기](https://github.com/NXYUI/BA-Plana-Report/releases) · [Discord 서버](https://discord.gg/bP3QCEsqsH)
 
