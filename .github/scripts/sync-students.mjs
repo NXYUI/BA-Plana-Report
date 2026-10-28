@@ -1,7 +1,10 @@
 // SchaleDB 학생 데이터(한국어)를 받아 BA Plana Report 앱이 쓰는 필드만 남겨 저장한다.
 // - students.json: 명부(이름, 구분, 출시 여부, 순서)와 프로필 속성(공격·방어 타입, 무기, 사거리, 엄폐, 포지션, 역할, 학교, 지형 적성)
 // - skills.json: 스킬(EX·기본·강화·서브와 애용품·고유무기 강화, 아이콘 이름)과 효과 이름 사전. 앱이 학생 프로필을 처음 열 때 받는다
-// - icons/student/<Id>.webp, icons/skill/<Icon>.webp: 학생·스킬 아이콘. 앱이 SchaleDB 대신 여기서 먼저 받는다.
+// - bond.json: 학생 프로필(이름·학년·생일·취미·소개·학교·동아리)과 대사 글자(로비·모집·승리·편성·인연). 앱의 당번이 쓴다.
+//   음성 파일과 그 주소는 넣지 않는다 (글자만)
+// - icons/student/<Id>.webp, icons/skill/<Icon>.webp: 학생·스킬 아이콘. portraits/<Id>.webp: 전신 일러스트(당번·학생 뽑기).
+//   앱이 SchaleDB 대신 여기서 먼저 받는다.
 //   이미 있는 그림은 다시 받지 않는다(--refresh-icons면 모두 다시 받는다). 그림을 못 받아도 데이터 갱신은 멈추지 않는다
 // 형식이 이상하면 실패해서(종료 코드 1) data 브랜치의 기존 데이터를 덮지 않는다.
 // 사용: node .github/scripts/sync-students.mjs <출력 폴더(data 브랜치 작업 트리)> [--refresh-icons]
@@ -12,6 +15,7 @@ import { join } from 'node:path'
 
 const SOURCE = 'https://schaledb.com/data/kr/students.min.json'
 const LOCALIZATION = 'https://schaledb.com/data/kr/localization.min.json'
+const VOICE = 'https://schaledb.com/data/kr/voice.min.json'
 const MIN_STUDENTS = 100
 const out = process.argv[2] ?? 'out'
 const refreshIcons = process.argv.includes('--refresh-icons')
@@ -22,7 +26,7 @@ async function get(url) {
   if (!res.ok) throw new Error(`SchaleDB 응답 오류: HTTP ${res.status} (${url})`)
   return res.json()
 }
-const [raw, localization] = await Promise.all([get(SOURCE), get(LOCALIZATION)])
+const [raw, localization, voice] = await Promise.all([get(SOURCE), get(LOCALIZATION), get(VOICE)])
 const list = Array.isArray(raw) ? raw : Object.values(raw)
 
 // 프로필 속성: 있는 것만 옮긴다 (앱이 값을 다시 검사한다)
@@ -37,8 +41,56 @@ const ICON_NAME = /^[A-Za-z0-9_]{1,80}$/
 const pickSkills = (s) =>
   Object.fromEntries(SKILL_KINDS.filter((k) => s?.Skills?.[k]).map((k) => [k, pickSkill(s.Skills[k])]))
 
+// 대사 묶음 이름(끝 번호를 뺀 것) → 종류 (앱 src/shared/bond.ts LINE_GROUPS와 같다). 선생님 생일 대사는 쓰지 않는다
+const LINE_GROUPS = {
+  UILobbyEnter: 'enter',
+  UILobbyIdle: 'idle',
+  UILobbyStudentBDay: 'birthday',
+  UILobbyHalloween: 'halloween',
+  UILobbyXmas: 'xmas',
+  UILobbyNewYear: 'newyear',
+  CharacterGetIdle: 'join',
+  TacticVictory: 'tacticWin',
+  BattleVictory: 'battleWin',
+  FormationIn: 'formation',
+  RelationshipUp: 'bondUp',
+}
+const text = (v) => (typeof v === 'string' && v.trim() ? v.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim() : undefined)
+/** 같은 묶음 이름(예: UILobbyIdle2)이 여러 번 나오면 한 번에 이어지는 대사 */
+function pickLines(v) {
+  const groups = new Map()
+  const entries = v && typeof v === 'object' ? [v.Normal, v.Battle, v.Lobby, v.Event].flatMap((g) => (Array.isArray(g) ? g : [])) : []
+  for (const e of entries) {
+    const kind = typeof e?.Group === 'string' ? LINE_GROUPS[e.Group.replace(/\d+$/, '')] : undefined
+    const t = text(e?.Transcription)
+    if (!kind || !t) continue
+    if (!groups.has(e.Group)) groups.set(e.Group, { kind, parts: [] })
+    groups.get(e.Group).parts.push(t)
+  }
+  const out = {}
+  for (const { kind, parts } of groups.values()) (out[kind] ??= []).push(parts)
+  return out
+}
+const pickProfile = (s) => {
+  const md = typeof s.BirthDay === 'string' && /^(\d{1,2})\/(\d{1,2})$/.exec(s.BirthDay)
+  return {
+    familyName: text(s.FamilyName),
+    personalName: text(s.PersonalName),
+    schoolYear: text(s.SchoolYear),
+    age: text(s.CharacterAge),
+    birthday: text(s.Birthday),
+    birthMonthDay: md ? [Number(md[1]), Number(md[2])] : undefined,
+    hobby: text(s.Hobby),
+    intro: text(s.ProfileIntroduction),
+    school: typeof s.School === 'string' ? s.School : undefined,
+    schoolName: text(localization?.SchoolLong?.[s.School]),
+    club: text(localization?.Club?.[s.Club]),
+  }
+}
+
 const problems = []
 const students = []
+const bondList = []
 const skillList = []
 for (const s of list) {
   const ok =
@@ -63,6 +115,7 @@ for (const s of list) {
   })
   const skills = pickSkills(s)
   if (Object.keys(skills).length) skillList.push({ Id: s.Id, Skills: skills })
+  bondList.push({ Id: s.Id, profile: pickProfile(s), lines: pickLines(voice?.[String(s.Id)]) })
 }
 
 if (students.length < MIN_STUDENTS) throw new Error(`학생이 ${students.length}명뿐이에요. SchaleDB 형식이 바뀌었을 수 있어요.`)
@@ -74,16 +127,24 @@ if (skillList.length < MIN_STUDENTS) throw new Error(`스킬이 있는 학생이
 const terms = localization?.BuffName
 if (!terms || typeof terms !== 'object' || Object.keys(terms).length < 50) throw new Error('효과 이름 사전(BuffName)이 없거나 너무 작아요.')
 
+// 대사가 있는 학생이 너무 적으면 대사 데이터 형식이 바뀐 것으로 본다
+const withLines = bondList.filter((b) => Object.keys(b.lines).length).length
+if (withLines < MIN_STUDENTS) throw new Error(`대사가 있는 학생이 ${withLines}명뿐이에요. SchaleDB 대사 형식이 바뀌었을 수 있어요.`)
+
 students.sort((a, b) => a.Id - b.Id)
 skillList.sort((a, b) => a.Id - b.Id)
+bondList.sort((a, b) => a.Id - b.Id)
 const body = JSON.stringify(students) + '\n'
 const sha256 = createHash('sha256').update(body).digest('hex')
 const skillsBody = JSON.stringify({ schema: 1, terms, students: skillList }) + '\n'
 const skillsSha256 = createHash('sha256').update(skillsBody).digest('hex')
+const bondBody = JSON.stringify({ schema: 1, students: bondList }) + '\n'
+const bondSha256 = createHash('sha256').update(bondBody).digest('hex')
 
 await mkdir(out, { recursive: true })
 await writeFile(join(out, 'students.json'), body)
 await writeFile(join(out, 'skills.json'), skillsBody)
+await writeFile(join(out, 'bond.json'), bondBody)
 
 // 아이콘: 없는 것만 받는다 (SchaleDB에 보내는 요청을 줄이려고). 받은 것이 WebP가 아니면 버린다
 const isWebp = (b) => b.length > 12 && b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP'
@@ -94,6 +155,8 @@ const skillIcons = [
 const jobs = [
   ...students.map((s) => ({ url: `https://schaledb.com/images/student/icon/${s.Id}.webp`, dir: 'icons/student', file: `${s.Id}.webp` })),
   ...skillIcons.map((n) => ({ url: `https://schaledb.com/images/skill/${n}.webp`, dir: 'icons/skill', file: `${n}.webp` })),
+  // 전신 일러스트는 한 장 85~175KB (2026-10)라 상한을 크게 둔다
+  ...students.map((s) => ({ url: `https://schaledb.com/images/student/portrait/${s.Id}.webp`, dir: 'portraits', file: `${s.Id}.webp`, maxBytes: 1024 * 1024 })),
 ]
 const todo = []
 for (const j of jobs) if (refreshIcons || !(await exists(join(out, j.dir, j.file)))) todo.push(j)
@@ -105,7 +168,7 @@ async function iconWorker() {
       const res = await fetch(j.url, { headers: HEADERS, signal: AbortSignal.timeout(30_000) })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const bytes = Buffer.from(await res.arrayBuffer())
-      if (bytes.length > 512 * 1024 || !isWebp(bytes)) throw new Error('WebP가 아님')
+      if (bytes.length > (j.maxBytes ?? 512 * 1024) || !isWebp(bytes)) throw new Error('WebP가 아님')
       await mkdir(join(out, j.dir), { recursive: true })
       await writeFile(join(out, j.dir, j.file), bytes)
       fetched++
@@ -128,7 +191,8 @@ await writeFile(
       count: students.length,
       sha256,
       skills: { source: [SOURCE, LOCALIZATION], count: skillList.length, sha256: skillsSha256 },
-      icons: { student: await countDir('icons/student'), skill: await countDir('icons/skill') },
+      bond: { source: [SOURCE, VOICE, LOCALIZATION], count: bondList.length, withLines, sha256: bondSha256 },
+      icons: { student: await countDir('icons/student'), skill: await countDir('icons/skill'), portrait: await countDir('portraits') },
     },
     null,
     2,
@@ -142,7 +206,9 @@ await writeFile(
 
 - \`students.json\`: [SchaleDB](https://schaledb.com)의 한국어 학생 데이터에서 BA Plana Report 앱이 쓰는 필드만 남긴 것 (Id, Name, SquadType, IsReleased, DefaultOrder와 프로필 속성: 공격·방어 타입, 무기, 사거리, 엄폐, 포지션, 역할, 학교, 지형 적성)
 - \`skills.json\`: 학생별 스킬(이름, 설명, 레벨별 수치, 코스트, 아이콘 이름)과 효과 이름 사전(SchaleDB 한국어 BuffName). 앱이 학생 프로필을 처음 열 때 받는다
+- \`bond.json\`: 학생 프로필(이름, 학년, 생일, 취미, 소개, 학교·동아리)과 대사 글자(로비·모집·승리·편성·인연 랭크). 앱의 당번이 쓴다. 음성은 넣지 않는다
 - \`icons/student/<Id>.webp\`, \`icons/skill/<아이콘 이름>.webp\`: SchaleDB의 학생·스킬 아이콘
+- \`portraits/<Id>.webp\`: SchaleDB의 학생 전신 일러스트 (당번·학생 뽑기)
 - \`meta.json\`: 출처, 학생 수, 각 파일의 SHA-256, 아이콘 수
 
 데이터와 그림의 출처는 SchaleDB입니다. 앱은 이 브랜치에서 먼저 받고, 받을 수 없으면 SchaleDB에서 직접 받습니다.
