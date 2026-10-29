@@ -11,8 +11,19 @@
     "count": 278,
     "sha256": "c19849d9f01c84cfb25f0fca4d33f66df2acd7d22a45555cdc8a0192b7553686"
   },
+  "bond": {
+    "source": [
+      "https://schaledb.com/data/kr/students.min.json",
+      "https://schaledb.com/data/kr/voice.min.json",
+      "https://schaledb.com/data/kr/localization.min.json"
+    ],
+    "count": 278,
+    "withLines": 278,
+    "sha256": "bddf1bdd88cfd67c52d81f404a0d53d32ae9c24c81cbab675a498205dc5ba3b3"
+  },
   "icons": {
     "student": 278,
-    "skill": 146
+    "skill": 146,
+    "portrait": 278
   }
 }
