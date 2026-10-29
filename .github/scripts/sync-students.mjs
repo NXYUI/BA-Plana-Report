@@ -86,6 +86,8 @@ const pickProfile = (s) => {
     schoolName: text(localization?.SchoolLong?.[s.School]),
     club: text(localization?.Club?.[s.Club]),
     star: Number.isInteger(s.StarGrade) ? s.StarGrade : undefined,
+    voice: text(s.CharacterVoice),
+    illustrator: text(s.Illustrator),
   }
 }
 
