@@ -85,6 +85,7 @@ const pickProfile = (s) => {
     school: typeof s.School === 'string' ? s.School : undefined,
     schoolName: text(localization?.SchoolLong?.[s.School]),
     club: text(localization?.Club?.[s.Club]),
+    star: Number.isInteger(s.StarGrade) ? s.StarGrade : undefined,
   }
 }
 
