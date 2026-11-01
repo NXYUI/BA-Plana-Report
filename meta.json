@@ -1,15 +1,15 @@
 {
   "schema": 2,
   "source": "https://schaledb.com/data/kr/students.min.json",
-  "count": 278,
-  "sha256": "5c775c1300a2eeb49a2862cdccfaa06fbc077976704d536fcbff921f3046acfb",
+  "count": 281,
+  "sha256": "b051b05b21470047dbfcc997df470571bae6c47a23b2193db65822a534ef7123",
   "skills": {
     "source": [
       "https://schaledb.com/data/kr/students.min.json",
       "https://schaledb.com/data/kr/localization.min.json"
     ],
-    "count": 278,
-    "sha256": "c19849d9f01c84cfb25f0fca4d33f66df2acd7d22a45555cdc8a0192b7553686"
+    "count": 281,
+    "sha256": "f91f0086d64a711c4e28a78d39291c155939d9e4b843beb6bcd84eb254103adb"
   },
   "bond": {
     "source": [
@@ -17,13 +17,13 @@
       "https://schaledb.com/data/kr/voice.min.json",
       "https://schaledb.com/data/kr/localization.min.json"
     ],
-    "count": 278,
-    "withLines": 278,
-    "sha256": "df9c80ba52d76a2b862d38b3d954baf4995aed50032e6453afffbc531eb27d0f"
+    "count": 281,
+    "withLines": 281,
+    "sha256": "b37cd4212c3957d784a5f343d448df098b5170c9b10e6001602401baf407022f"
   },
   "icons": {
-    "student": 278,
-    "skill": 146,
-    "portrait": 278
+    "student": 281,
+    "skill": 149,
+    "portrait": 281
   }
 }
