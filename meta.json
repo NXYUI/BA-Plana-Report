@@ -2,7 +2,7 @@
   "schema": 2,
   "source": "https://schaledb.com/data/kr/students.min.json",
   "count": 281,
-  "sha256": "b051b05b21470047dbfcc997df470571bae6c47a23b2193db65822a534ef7123",
+  "sha256": "3c25c23fd77059d4d7186bcd5d2a99026f731515cfc1d69520e04e52a2cd9a66",
   "skills": {
     "source": [
       "https://schaledb.com/data/kr/students.min.json",
